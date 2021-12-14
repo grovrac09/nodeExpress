@@ -15,7 +15,7 @@ exports.listUser = async (req, res) => {
     try {
         res.status(200).send(await User.find({}));
     } catch (error) {
-        console.log(error)
+        res.status(500).send({message: "Unsuccessful, please try again."});
     }
 }
 
@@ -25,15 +25,15 @@ exports.updateUser = async (req, res) => {
         const updatedUser = await User.findById(req.body._id);
         res.status(200).send({message: "Successfully updated user.", updatedUser});
     } catch (error) {
-        console.log(error)
+        res.status(500).send({message: "Unsuccessful, please try again."});
     } 
 };
 
-// exports.deleteMusic = async () => {
-//     try {
-//         await User.deleteOne({});
-//         console.log(`Successfully deleted user.`);
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+exports.deleteUser = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.body._id);
+        res.status(200).send({message: "Successfully deleted user."});
+    } catch (error) {
+        res.status(500).send({message: "Unsuccessful, please try again."});
+    } 
+};

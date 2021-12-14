@@ -10,3 +10,13 @@ exports.hashPassword = async (req, res, next) => {
         req.status(500).send({message: "Unsuccessful, please try again."});
     }
 };
+
+exports.checkPassword = async (req, res, next) => {
+    try {
+        req.body.password = await bcrypt.compare(req.body.password, hash);
+        next();
+    } catch (error) {
+        console.log(error);
+        req.status(500).send({message: "Unsuccessful, please try again."});
+    }
+};
