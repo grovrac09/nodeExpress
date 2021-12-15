@@ -6,17 +6,34 @@ exports.hashPassword = async (req, res, next) => {
         req.body.password = await bcrypt.hash(req.body.password, 8);
         next();
     } catch (error) {
-        console.log(error);
-        req.status(500).send({message: "Unsuccessful, please try again."});
+        res.status(500).send({message: "Unsuccessful, please try again."});
     }
 };
 
 exports.checkPassword = async (req, res, next) => {
     try {
-        req.body.password = await bcrypt.compare(req.body.password, hash);
-        next();
+        const findPw = await User.findById({_id: req.body._id});
+        const checker = await bcrypt.compare(req.body.password, findPw.password);
+        if (checker === true) {
+            res.status(200).send({message: "Successfully checked password."});
+            next();
+        } else {
+            res.status(500).send({message: "Unsuccessful, please try again."});
+        }
     } catch (error) {
-        console.log(error);
-        req.status(500).send({message: "Unsuccessful, please try again."});
+        res.status(500).send({message: "Unsuccessful, please try again."});
     }
 };
+
+exports.checkEmail = async (req, res, next) => {
+    try {
+        if (/.+\@.+\..+/.test(req.body.email)) {
+            next();
+        } else {
+            res.status(500).send({message: "Invalid email address entered."});
+        }
+    } catch (error) {
+        res.status(500).send({message: "Unsuccessful, please try again."});
+    }
+};
+

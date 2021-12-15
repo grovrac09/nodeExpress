@@ -6,7 +6,6 @@ exports.addUser = async (req, res) => {
         await newUser.save();
         res.status(200).send({message: "Successfully added user.", newUser});
     } catch (error) {
-        console.log(error);
         res.status(500).send({message: "Unsuccessful, please try again."});
     }
 };
@@ -37,3 +36,4 @@ exports.deleteUser = async (req, res) => {
         res.status(500).send({message: "Unsuccessful, please try again."});
     } 
 };
+
